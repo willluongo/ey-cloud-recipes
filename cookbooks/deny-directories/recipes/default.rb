@@ -6,6 +6,13 @@ if ['app_master', 'app', 'solo'].include?(node[:instance_role])
 			group node[:owner_name]
 			mode 0644
 		end
+		remote_file "/data/nginx/servers/#{app}/ssl/custom.conf" do
+			source "custom.conf"
+			owner node[:owner_name]
+			group node[:owner_name]
+			mode 0644
+			only_if { ::File.exists?("/data/nginx/servers/#{app}/ssl/") }
+		end
 	end
 
 	execute "Reload nginx config" do
